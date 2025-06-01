@@ -1,9 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 void print_array(int arr[], int size);
-void merge_sort(int arr[], int left, int right);
-void merge(int arr[], int left, int mid, int right);
+void merge_sort(int arr[], int size);
+void merge_sort_helper(int arr[], int temp[], int left, int right);
+void merge(int arr[], int temp[], int left, int mid, int right);
 
 int main()
 {
@@ -12,7 +14,7 @@ int main()
 
     print_array(arr, n);
 
-    merge_sort(arr, 0, n - 1);
+    merge_sort(arr, n);
 
     print_array(arr, n);
 }
@@ -24,37 +26,70 @@ void print_array(int arr[], int size)
     printf("\n");
 }
 
-void merge_sort(int arr[], int left, int right)
+void merge_sort(int arr[], int size)
+{
+    if (size <= 1) return;
+
+    int *temp = malloc(size * sizeof(int));
+    if (temp == NULL)
+    {
+        printf("[ERROR] Memory allocation failed");
+        exit(1);
+    }
+
+    merge_sort_helper(arr, temp, 0, size - 1);
+
+    free(temp);
+}
+
+void merge_sort_helper(int arr[], int temp[], int left, int right)
 {
     if (left >= right) return;
 
-    int mid = (left + right) / 2;
+    int mid = left + (right - left) / 2;
 
-    merge_sort(arr, left, mid);
-    merge_sort(arr, mid + 1, right);
+    merge_sort_helper(arr, temp, left, mid);
+    merge_sort_helper(arr, temp, mid + 1, right);
 
-    merge(arr, left, mid, right);
+    merge(arr, temp, left, mid, right);
 }
 
-void merge(int arr[], int left, int mid, int right)
+void merge(int arr[], int temp[], int left, int mid, int right)
 {
     int n1 = mid - left + 1;
     int n2 = right - mid;
-
-    int *L = malloc(n1 * sizeof(int));
-    int *R = malloc(n2 * sizeof(int));
-
-    for (int i = 0; i < n1; i++) L[i] = arr[left + i];
-    for (int j = 0; j < n2; j++) R[j] = arr[mid + 1 + j];
-
     int i = 0, j = 0, k = left;
-    while (i < n1 && j < n2)
-        arr[k++] = (L[i] <= R[j]) ? L[i++] : R[j++];
-    while (i < n1) arr[k++] = L[i++];
-    while (j < n2) arr[k++] = R[j++];
 
-    free(L);
-    free(R);
+    memcpy(temp, &arr[left], n1 * sizeof(int));
+    memcpy(&temp[n1], &arr[mid + 1], n2 * sizeof(int));
+
+    while (i < n1 && j < n2)
+    {
+        if (temp[i] <= temp[n1 + j])
+        {
+            arr[k] = temp[i];
+            i ++;
+        }
+        else
+        {
+            arr[k] = temp[n1 + j];
+            j++;
+        }
+        k++;
+    }
+
+    while (i < n1)
+    {
+        arr[k] = temp[i];
+        i++;
+        k++;
+    }
+    while (j < n2)
+    {
+        arr[k] = temp[n1 + j];
+        j++;
+        k++;
+    }
 }
 
 
