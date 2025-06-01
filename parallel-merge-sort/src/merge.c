@@ -56,39 +56,31 @@ void merge_sort_helper(int arr[], int temp[], int left, int right)
 
 void merge(int arr[], int temp[], int left, int mid, int right)
 {
-    int n1 = mid - left + 1;
-    int n2 = right - mid;
-    int i = 0, j = 0, k = left;
+    memcpy(&temp[left], &arr[left], (right - left + 1) * sizeof(int));
 
-    memcpy(temp, &arr[left], n1 * sizeof(int));
-    memcpy(&temp[n1], &arr[mid + 1], n2 * sizeof(int));
+    int i = left;
+    int j = mid + 1;
+    int k = left;
 
-    while (i < n1 && j < n2)
+    while (i <= mid && j <= right)
     {
-        if (temp[i] <= temp[n1 + j])
+        if (temp[i] <= temp[j])
         {
-            arr[k] = temp[i];
-            i ++;
+            arr[k++] = temp[i++];
         }
         else
         {
-            arr[k] = temp[n1 + j];
-            j++;
+            arr[k++] = temp[j++];
         }
-        k++;
     }
 
-    while (i < n1)
+    while (i <= mid)
     {
-        arr[k] = temp[i];
-        i++;
-        k++;
+        arr[k++] = temp[i++];
     }
-    while (j < n2)
+    while (j <= right)
     {
-        arr[k] = temp[n1 + j];
-        j++;
-        k++;
+        arr[k++] = temp[j++];
     }
 }
 
