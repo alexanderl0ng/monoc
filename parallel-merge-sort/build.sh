@@ -8,8 +8,8 @@ if [ -z "${gcc:+1}" ];      then clang=1; fi
 if [ -z "${release:+1}" ];  then debug=1; fi
 if [ -n "${debug:+1}" ];    then echo "[debug mode]"; fi
 if [ -n "${release:+1}" ];  then echo "[release mode]"; fi
-if [ -n "${clang:+1}" ];    then compiler="${CC:-clang++}"; echo "[clang compile]"; fi
-if [ -n "${gcc:+1}" ];      then compiler="${CC:-g++}"; echo "[gcc compile]"; fi
+if [ -n "${clang:+1}" ];    then compiler="${CC:-clang}"; echo "[clang compile]"; fi
+if [ -n "${gcc:+1}" ];      then compiler="${CC:-gcc}"; echo "[gcc compile]"; fi
 
 # --- Compile/Link Line Definitions --------------------------------------------
 
@@ -42,7 +42,7 @@ platform_macros=(
   -Dgnu_printf=printf
 )
 
-clang_standard="-std=c++17"
+# clang_standard="-std=c++17"
 clang_include="-I../src/"
 clang_common="${diagnostic_flags[*]} ${platform_macros[*]}"
 # clang_common="$clang_common ${suppressed_warnings[*]}"
@@ -51,7 +51,7 @@ clang_release="$compiler -g -O2 -DBUILD_DEBUG=0 $clang_common"
 clang_link=""
 clang_out="-o"
 
-gcc_standard="-std=c++17"
+# gcc_standard="-std=c++17"
 gcc_include="-I../src/"
 gcc_common="${diagnostic_flags[*]} ${platform_macros[*]}"
 gcc_common="$gcc_common ${suppressed_warnings[*]}"
@@ -79,9 +79,9 @@ mkdir -p build
 
 # --- Build Everything ---------------------------------------------------------
 cd build
-if [ -n "${main:+1}" ];             then didbuild=1 && $compile ../src/main.cpp $compile_include $compile_link $out main; fi
-if [ -n "${merge:+1}" ];            then didbuild=1 && $compile ../src/merge.cpp $compile_include $compile_link $out merge; fi
-if [ -n "${parallel_merge:+1}" ];   then didbuild=1 && $compile ../src/parallel_merge.cpp $compile_include $compile_link $out parallel_merge; fi
+if [ -n "${main:+1}" ];             then didbuild=1 && $compile ../src/main.c $compile_include $compile_link $out main; fi
+if [ -n "${merge:+1}" ];            then didbuild=1 && $compile ../src/merge.c $compile_include $compile_link $out merge; fi
+if [ -n "${parallel_merge:+1}" ];   then didbuild=1 && $compile ../src/parallel_merge.c $compile_include $compile_link $out parallel_merge; fi
 cd ..
 
 # --- Warn On No Builds -------------------------------------------------------
