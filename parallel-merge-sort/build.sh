@@ -44,6 +44,7 @@ platform_macros=(
 
 # clang_standard="-std=c++17"
 clang_include="-I../src/"
+clang_sources="../src/utils.c ../src/merge.c ../src/parallel_merge.c"
 clang_common="${diagnostic_flags[*]} ${platform_macros[*]}"
 # clang_common="$clang_common ${suppressed_warnings[*]}"
 clang_debug="$compiler -g -O0 -DBUILD_DEBUG=1 $clang_common"
@@ -79,7 +80,7 @@ mkdir -p build
 
 # --- Build Everything ---------------------------------------------------------
 cd build
-if [ -n "${main:+1}" ];             then didbuild=1 && $compile ../src/main.c $compile_include $compile_link $out main; fi
+if [ -n "${main:+1}" ];             then didbuild=1 && $compile ../src/main.c $clang_sources $compile_include $compile_link $out main; fi
 if [ -n "${merge:+1}" ];            then didbuild=1 && $compile ../src/merge.c $compile_include $compile_link $out merge; fi
 if [ -n "${parallel_merge:+1}" ];   then didbuild=1 && $compile ../src/parallel_merge.c $compile_include $compile_link $out parallel_merge; fi
 cd ..
