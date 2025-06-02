@@ -54,6 +54,7 @@ clang_out="-o"
 
 # gcc_standard="-std=c++17"
 gcc_include="-I../src/"
+gcc_sources="../src/utils.c ../src/merge.c ../src/parallel_merge.c"
 gcc_common="${diagnostic_flags[*]} ${platform_macros[*]}"
 gcc_common="$gcc_common ${suppressed_warnings[*]}"
 gcc_debug="$compiler -g -O0 -DBUILD_DEBUG=1 $gcc_common"
@@ -64,11 +65,13 @@ gcc_out="-o"
 # --- Choose Compile/Link Lines ------------------------------------------------
 if [ -n "${gcc:+1}" ];      then compile_debug="$gcc_debug"; fi
 if [ -n "${gcc:+1}" ];      then compile_release="$gcc_release"; fi
+if [ -n "${gcc:+1}" ];      then compile_sources="$gcc_sources"; fi
 if [ -n "${gcc:+1}" ];      then compile_include="$gcc_include"; fi
 if [ -n "${gcc:+1}" ];      then compile_link="$gcc_link"; fi
 if [ -n "${gcc:+1}" ];      then out="$gcc_out"; fi
 if [ -n "${clang:+1}" ];    then compile_debug="$clang_debug"; fi
 if [ -n "${clang:+1}" ];    then compile_release="$clang_release"; fi
+if [ -n "${clang:+1}" ];    then compile_sources="$clang_sources"; fi
 if [ -n "${clang:+1}" ];    then compile_include="$clang_include"; fi
 if [ -n "${clang:+1}" ];    then compile_link="$clang_link"; fi
 if [ -n "${clang:+1}" ];    then out="$clang_out"; fi
@@ -80,9 +83,7 @@ mkdir -p build
 
 # --- Build Everything ---------------------------------------------------------
 cd build
-if [ -n "${main:+1}" ];             then didbuild=1 && $compile ../src/main.c $clang_sources $compile_include $compile_link $out main; fi
-if [ -n "${merge:+1}" ];            then didbuild=1 && $compile ../src/merge.c $compile_include $compile_link $out merge; fi
-if [ -n "${parallel_merge:+1}" ];   then didbuild=1 && $compile ../src/parallel_merge.c $compile_include $compile_link $out parallel_merge; fi
+if [ -n "${main:+1}" ];             then didbuild=1 && $compile ../src/main.c $compile_sources $compile_include $compile_link $out main; fi
 cd ..
 
 # --- Warn On No Builds -------------------------------------------------------
