@@ -5,7 +5,7 @@
 #include "merge.h"
 #include "utils.h"
 
-#define ARRAY_SIZE 600000
+#define ARRAY_SIZE 500000
 #define MIN_VAL 1
 #define MAX_VAL 10000
 
@@ -22,6 +22,14 @@ int main()
 
     double elapsed_merge = end_timer(start_merge);
     printf("Time to sort using the sequential function: %.4f seconds\n", elapsed_merge);
+    if (is_sorted(test_array, ARRAY_SIZE))
+    {
+        printf("The array is sorted\n\n");
+    }
+    else
+    {
+        printf("The array is NOT sorted\n\n");
+    }
     free(test_array);
 
     printf("\nSorting using the threaded function...\n");
@@ -32,6 +40,14 @@ int main()
 
     double elapsed_threaded_merge = end_timer(start_threaded_merge);
     printf("Time to sort using the threaded function: %.4f seconds\n", elapsed_threaded_merge);
+    if (is_sorted(test_array_copy, ARRAY_SIZE))
+    {
+       printf("The array is sorted\n\n");
+    }
+    else
+    {
+       printf("The array is NOT sorted\n\n");
+    }
     free(test_array_copy);
 
     return 0;

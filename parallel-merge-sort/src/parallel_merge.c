@@ -3,7 +3,8 @@
 #include <string.h>
 #include <pthread.h>
 
-#define MAX_DEPTH 4
+#define MAX_DEPTH 2
+#define THRESHOLD 2048
 
 typedef struct {
     int *arr;
@@ -59,7 +60,9 @@ static void* parallel_merge_sort_helper(void* arg)
 {
     thread_data* data = (thread_data*)arg;
 
-    if (data->left >= data->right || data->depth <= 0)
+    if (data->left >= data->right) return NULL;
+
+    if (data->right - data->left <= THRESHOLD || data->depth <= 0)
     {
         merge_sort_helper(data->arr, data->temp, data->left, data->right);
         return NULL;

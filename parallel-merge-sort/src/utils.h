@@ -8,5 +8,6 @@ void start_timer(clock_t *start_time);
 double end_timer(clock_t start_time);
 int* create_random_array(int size, int min_val, int max_val);
 int* copy_array(const int* original, int size);
+int is_sorted(int arr[], int size);
 
 #endif
